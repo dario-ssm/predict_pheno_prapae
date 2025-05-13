@@ -316,12 +316,12 @@ ggsave(filename = here("figures/gilbert_modelpreds_validate_rmsep.svg"),
 # 3. Schmalensee's data ---------------------------------------------------------
 selected_models_pieris_rapae <- readRDS(here("data/selected_models_schmalensee.rds"))
 
-schmalensee_pieris_data <- read_delim(here("data/full_data.txt"),
+schmalensee_pieris_data <- read_delim(here("data/schmalensee2023.txt"), 
                                       delim = "\t") |> 
   filter(species == "rapae",
          life.stage == "pupa") |> 
   select(temp, dev.rate) |> 
-  drop_na()
+  drop_na() 
 
 ##### 3.1. Daily resolution ----
 

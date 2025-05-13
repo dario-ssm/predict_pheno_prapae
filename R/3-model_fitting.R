@@ -19,7 +19,7 @@ library(mappestRisk)
 
 #####  a) von Schmalensee 2023 ---------------------------------------------------
 
-schmalensee_pieris_data <- read_delim("~/Data and scripts von Schmalensee et al. 2023/Data and scripts von Schmalensee et al. 2023/Data/full_data.txt", 
+schmalensee_pieris_data <- read_delim(here("data/schmalensee2023.txt"), 
                                       delim = "\t") |> 
   filter(species == "rapae",
          life.stage == "pupa") |> 
