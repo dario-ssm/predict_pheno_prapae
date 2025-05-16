@@ -1,5 +1,9 @@
 library(tidyverse)
 library(here)
+library(lubridate)
+library(leaflet)
+library(leaflet.extras2)
+library(RColorBrewer)
 library(terra)
 library(sf)
 library(easyclimate)
@@ -8,7 +12,7 @@ source(here("R/1-functions_phenobraspests.R"))
 # 1. CBMS data wrangling ----
 
 ## load pieris rapae only data counting
-piepra_raw_count_data_csv <- read_delim(here("data/prapae_cbms.csv")) |> 
+piepra_raw_count_data_csv <- read_delim("~/dev_rapae/data_source/peticio_sansegundo.csv") |> 
   mutate(Nindiv = if_else(Nindiv == 0.5, # <- misread with R
                           1,
                           Nindiv))
@@ -32,7 +36,7 @@ piepra_raw_count_data <- piepra_raw_count_data_csv |>
   glimpse()
 
 ## Combined data set
-cbms_all_transects <- read_delim(here("data/visitations_cbms.csv")) |> 
+cbms_all_transects <- read_delim("~/dev_rapae/data_source/m_visit_sub.csv") |> 
  rename(id_transect = SITE_ID,
         date = DATE)|> 
   select(id_transect, date) |> 
@@ -563,9 +567,8 @@ preds_obs_compare_plot_pooled <- ggplot(cbms_preds_obs_pooled,
 preds_obs_compare_plot_pooled  
 
 ggsave(filename = here("figures/preds_obs_compare_plot_rmsep_group.png"),
-       width = 25,
-       height = 25,
-       units = "cm")
+       width = 2600, height = 2600, units = "px")
+
 ggsave(filename = here("figures/preds_obs_compare_plot_rmsep_group.svg"),
        width = 25,
        height = 25,
@@ -575,14 +578,12 @@ ggsave(filename = here("figures/preds_obs_compare_plot_rmsep_group.svg"),
 
 # 3. Schmalensee Predictions -----------------------------------------------------
 selected_models_pieris_rapae <- readRDS(here("data/selected_models_schmalensee.rds"))
-
-schmalensee_pieris_data <- read_delim(here("data/schmalensee2023.txt"), 
+schmalensee_pieris_data <- read_delim("~/Data and scripts von Schmalensee et al. 2023/Data and scripts von Schmalensee et al. 2023/Data/full_data.txt", 
                                       delim = "\t") |> 
   filter(species == "rapae",
          life.stage == "pupa") |> 
   select(temp, dev.rate) |> 
   drop_na() 
-
 ###### a) daily  ----
 daily_rate_preds_cbms <- tibble()
 
